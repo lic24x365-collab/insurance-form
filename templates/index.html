@@ -1,11 +1,45 @@
-<form action="/process-pdf" method="POST" enctype="multipart/form-data">
-    <h2>Family Medicare Form</h2>
-    பெயர்: <input type="text" name="proposer_name" required><br>
-    தொகை: <select name="sum_insured">
-        <option value="500000">5,00,000</option>
-        <option value="1000000">10,00,000</option>
-    </select><br>
-    புகைப்படம்: <input type="file" name="client_photo"><br>
-    கையொப்பம்: <input type="file" name="client_sign"><br>
-    <button type="submit">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIC Family Medicare Form</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; margin: 0; padding: 20px; }
+        .card { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 5px solid #00529b; }
+        h2 { color: #00529b; text-align: center; margin-bottom: 25px; }
+        label { font-weight: bold; display: block; margin-bottom: 8px; color: #333; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .btn { background: #00529b; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #003d73; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Family Medicare Form</h2>
+        <form action="/process-pdf" method="POST" enctype="multipart/form-data">
+            <label>வாடிக்கையாளர் பெயர் (Full Name)</label>
+            <input type="text" name="proposer_name" placeholder="எ.கா: சுப்ரமணி பாண்டி" required>
+
+            <label>காப்பீட்டுத் தொகை (Sum Insured)</label>
+            <select name="sum_insured">
+                <option value="500000">5,00,000</option>
+                <option value="1000000">10,00,000</option>
+                <option value="1500000">15,00,000</option>
+            </select>
+
+            <label>வாடிக்கையாளர் புகைப்படம் (Photo)</label>
+            <input type="file" name="client_photo" accept="image/*">
+
+            <label>வாடிக்கையாளர் கையொப்பம் (Signature)</label>
+            <input type="file" name="client_sign" accept="image/*">
+
+            <button type="submit" class="btn">சமர்ப்பிக்கவும் (SUBMIT)</button>
+        </form>
+    </div>
+    <div class="footer">
+        Designed by Subramani Pandi | Professional Financial Planner
+    </div>
+</body>
+</html>
