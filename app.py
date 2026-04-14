@@ -1,89 +1,61 @@
 import os
-import smtplib
 import io
-import sqlite3
-from datetime import datetime
-from flask import Flask, request, render_template, make_response, session, redirect, url_for
+from flask import Flask, request, render_template, send_file
 from pypdf import PdfReader, PdfWriter
-from xhtml2pdf import pisa
 
 app = Flask(__name__, template_folder='templates')
-app.secret_key = 'msrk_farm_2026_safe'
-
-# Database Path
-DB_PATH = 'flower_mandi.db'
-
-def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-# --- ROUTES ---
 
 @app.route('/')
 def home():
-    # இன்சூரன்ஸ் படிவம் முகப்பு
+    # 4-படிநிலை கொண்ட புதிய index.html-ஐக் காட்டும்
     return render_template('index.html')
 
-@app.route('/msrk')
-def msrk_index():
-    # மார்க்கெட் பில் முகப்பு
-    return "MSRK FARM Dashboard - (Add your HTML logic here)"
-
-@app.route('/download_pdf')
-def download_pdf():
-    # நீங்கள் கேட்ட அந்த 6 COLUMN PDF LOGIC
-    # (குறிப்பு: இங்கு தேவையான டேட்டாவை get_audit_data மூலம் எடுக்க வேண்டும்)
-    
-    html = f"""
-    <html>
-    <head>
-        <style>
-            @page {{ size: A4; margin: 1cm; }}
-            body {{ font-family: Helvetica; font-size: 9pt; }}
-            table {{ width: 100%; border-collapse: collapse; }}
-            th, td {{ border: 0.5pt solid black; padding: 5px; text-align: center; }}
-            th {{ background-color: #f2f2f2; font-weight: bold; }}
-        </style>
-    </head>
-    <body>
-        <h2 style="text-align:center;">MSRK FARM - AUDIT STATEMENT</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th width="15%">DATE</th>
-                    <th width="25%">PARTICULARS</th>
-                    <th width="15%">SALE VAL</th>
-                    <th width="15%">NET VAL</th>
-                    <th width="15%">ADVANCE</th>
-                    <th width="15%">AGRI EXP</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>14-04-2026</td>
-                    <td>Jasmine 10kg x 200</td>
-                    <td>2000.0</td>
-                    <td>1800.0</td>
-                    <td>0.0</td>
-                    <td>50.0</td>
-                </tr>
-            </tbody>
-        </table>
-    </body>
-    </html>"""
-    
-    result = io.BytesIO()
-    pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=result)
-    resp = make_response(result.getvalue())
-    resp.headers['Content-Type'] = 'application/pdf'
-    return resp
-
-# இன்சூரன்ஸ் PDF ப்ராசஸ்
 @app.route('/process-pdf', methods=['POST'])
 def process_pdf():
-    # நாம் ஏற்கனவே செய்த இன்சூரன்ஸ் லாஜிக்
-    return "Insurance PDF Processed Successfully"
+    # படிவத் தரவுகளைப் பெறுதல்
+    data = request.form.to_dict()
+    
+    # PDF கோப்பு பெயர் (உங்கள் GitHub-ல் உள்ளவாறே)
+    pdf_path = "FEMILY MEDICARE PRPOSAL-1.pdf"
+    
+    if not os.path.exists(pdf_path):
+        return f"பிழை: {pdf_path} கோப்பு சர்வரில் இல்லை! தயவுசெய்து GitHub-ல் கோப்பு பெயரைச் சரிபார்க்கவும்."
+
+    reader = PdfReader(pdf_path)
+    writer = PdfWriter()
+    
+    # 6 பக்கங்களையும் காப்பி செய்தல்
+    for page in reader.pages:
+        writer.add_page(page)
+
+    # PDF-ல் உள்ள கட்டங்களின் பெயர்களுக்குத் தரவுகளை மேப்பிங் செய்தல் [cite: 18-91]
+    # குறிப்பு: PDF-ல் உள்ள கட்டங்களின் பெயர்கள் மாறினால் இதையும் மாற்ற வேண்டும்
+    field_mapping = {
+        "Name": data.get('name', ''),               # முன்மொழிபவர் பெயர் [cite: 18]
+        "Date of Birth": data.get('dob', ''),       # பிறந்த தேதி [cite: 19]
+        "Present Address": data.get('address', ''), # முகவரி [cite: 36]
+        "Mobile": data.get('mobile', ''),           # மொபைல் எண் [cite: 46]
+        "Nominee Name": data.get('nominee_name', ''), # வாரிசுதாரர் [cite: 50]
+        "Sum Insured Options": data.get('sum_insured', '5 Lakhs'), # காப்பீட்டுத் தொகை [cite: 62]
+        "Intermediary Code": "AGN0004206"           # உங்கள் நிரந்தர குறியீடு [cite: 5, 252]
+    }
+    
+    # முதல் பக்கத்தில் தரவுகளைப் பதித்தல் [cite: 100]
+    writer.update_page_form_field_values(writer.pages[0], field_mapping)
+
+    # புதிய PDF-ஐ உருவாக்குதல்
+    output_filename = f"Proposal_{data.get('name', 'Customer')}.pdf"
+    output_stream = io.BytesIO()
+    writer.write(output_stream)
+    output_stream.seek(0)
+
+    # முடிவாக அந்த PDF-ஐ வாடிக்கையாளர் டவுன்லோட் செய்ய அனுமதித்தல்
+    return send_file(
+        output_stream,
+        as_attachment=True,
+        download_name=output_filename,
+        mimetype='application/pdf'
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
