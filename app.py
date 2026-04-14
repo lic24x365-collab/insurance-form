@@ -1,52 +1,39 @@
 import os
 import smtplib
-from flask import Flask, request
-from pypdf import PdfReader, PdfWriter
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from email.message import EmailMessage
 import io
+from flask import Flask, request, render_template
+from pypdf import PdfReader, PdfWriter
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
-EMAIL_ADDRESS = "support@lic2.in"
-EMAIL_PASSWORD = "lic123" # கவனிக்க: உங்கள் App Password-ஐ இங்கே இடவும்
+@app.route('/')
+def home():
+    # இதுதான் உங்கள் முதல் பக்கத்தைக் காட்டும்
+    return render_template('index.html')
 
 @app.route('/process-pdf', methods=['POST'])
 def process_pdf():
     data = request.form.to_dict()
-    client_photo = request.files.get('client_photo')
+    # உங்கள் GitHub-ல் உள்ள அதே கோப்பு பெயர்
+    pdf_path = "FEMILY MEDICARE PRPOSAL-1.pdf"
+    
+    if not os.path.exists(pdf_path):
+        return f"பிழை: {pdf_path} கோப்பு சர்வரில் இல்லை!"
 
-    reader = PdfReader("FEMILY_MEDICARE_PRPOSAL-1.pdf")
+    reader = PdfReader(pdf_path)
     writer = PdfWriter()
     for page in reader.pages:
         writer.add_page(page)
 
+    # படிவத் தரவுகள்
     field_values = {
         "ProposerName": data.get('proposer_name'),
         "IntermediaryCode": "AGN0004206",
-        "SumInsured": data.get('sum_insured', "500000"),
-        "PhysicalPolicy": "Yes",
-        "Declaration": "Yes"
+        "SumInsured": data.get('sum_insured', "500000")
     }
     
     writer.update_page_form_field_values(writer.pages[0], field_values)
+    return "படிவம் தயார்! (மின்னஞ்சல் வசதி இன்னும் இணைக்கப்படவில்லை)"
 
-    output_filename = f"Proposal_{data.get('proposer_name')}.pdf"
-    with open(output_filename, "wb") as f:
-        writer.write(f)
-
-    # மின்னஞ்சல் அனுப்பும் பகுதி
-    msg = EmailMessage()
-    msg['Subject'] = f"New Proposal: {data.get('proposer_name')}"
-    msg['From'] = EMAIL_ADDRESS
-    msg['To'] = EMAIL_ADDRESS
-    msg.set_content("New insurance proposal attached.")
-    with open(output_filename, 'rb') as f:
-        msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=output_filename)
-
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        smtp.send_message(msg)
-
-    return "மின்னஞ்சல் அனுப்பப்பட்டது!"
+if __name__ == '__main__':
+    app.run(debug=True)
