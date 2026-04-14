@@ -2,3 +2,4 @@ Flask
 pypdf
 reportlab
 gunicorn
+reportlab
