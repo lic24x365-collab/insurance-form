@@ -3,45 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>United India Insurance - 6 Page Full Proposal</title>
+    <title>United India Insurance - Full Proposal Form</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 15px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-top: 10px solid #00529b; }
-        .header { text-align: center; color: #00529b; border-bottom: 2px solid #eee; padding-bottom: 15px; }
-        .section-title { background: #00529b; color: white; padding: 12px; margin: 25px 0 15px 0; border-radius: 5px; font-weight: bold; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        label { display: block; margin-top: 10px; font-weight: bold; font-size: 13px; color: #333; }
-        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .insured-box { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; background: #fafafa; border-radius: 8px; }
-        .btn-submit { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; font-size: 18px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 30px; }
-        .btn-submit:hover { background: #219150; }
-        .medical-table { width: 100%; margin-top: 10px; border-collapse: collapse; }
-        .medical-table td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
+        .form-card { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid #00529b; }
+        .header { text-align: center; color: #00529b; border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
+        .section-title { background: #00529b; color: white; padding: 12px; margin-top: 30px; border-radius: 5px; font-weight: bold; text-transform: uppercase; font-size: 14px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 10px; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #333; font-size: 13px; }
+        input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .insured-box { border: 1px solid #dee2e6; padding: 20px; margin-top: 15px; border-radius: 8px; background: #fafafa; }
+        .medical-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .medical-table th, .medical-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .medical-table th { background: #f8f9fa; }
+        .btn-submit { background: #28a745; color: white; border: none; padding: 20px; width: 100%; font-size: 20px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 40px; }
+        .btn-submit:hover { background: #218838; }
+        .note { font-size: 11px; color: #666; font-style: italic; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="form-card">
     <div class="header">
-        <h2>United India Insurance Company Limited</h2>
-        <p><b>Family Medicare Policy - Proposal Form</b></p>
-        <p>Agent: Subramani Pandi | Code: AGN0004206</p>
+        <h2>UNITED INDIA INSURANCE COMPANY LIMITED</h2>
+        <p>Family Medicare Policy - Full Proposal Form (6 Pages)</p>
+        <p><b>Agent: SUBRAMANI PANDI | Code: AGN0004206</b></p>
     </div>
 
     <form action="/process-pdf" method="POST" enctype="multipart/form-data">
         
-        <div class="section-title">I. Proposer Details (முன்மொழிபவர் விவரங்கள்)</div>
+        <div class="section-title">I. Proposer Details (முன்மொழிபவர்)</div>
         <div class="grid">
             <div><label>Full Name</label><input type="text" name="name" required></div>
-            <div><label>Date of Birth</label><input type="date" name="dob" required></div>
+            <div><label>DOB (DD/MM/YYYY)</label><input type="date" name="dob" required></div>
             <div><label>Gender</label><select name="gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
         </div>
         <div class="grid">
             <div><label>Occupation</label><input type="text" name="occupation" placeholder="Salaried/Self-Employed"></div>
-            <div><label>PAN Number</label><input type="text" name="pan"></div>
-            <div><label>Aadhaar No</label><input type="text" name="aadhaar"></div>
+            <div><label>PAN No</label><input type="text" name="pan"></div>
+            <div><label>Aadhaar Card No</label><input type="text" name="aadhaar" required></div>
         </div>
-        <label>Present Address</label>
+        <label>Present Address (தற்போதைய முகவரி)</label>
         <textarea name="address" rows="2" required></textarea>
         <div class="grid">
             <div><label>Mobile Number</label><input type="tel" name="mobile" required></div>
@@ -51,79 +53,72 @@
         <div class="section-title">II. Nomination Details (வாரிசுதாரர்)</div>
         <div class="grid">
             <div><label>Nominee Name</label><input type="text" name="nominee_name"></div>
-            <div><label>Relationship</label><input type="text" name="nominee_rel"></div>
-            <div><label>Nominee Age</label><input type="number" name="nominee_age"></div>
+            <div><label>Relationship with Proposer</label><input type="text" name="nominee_rel"></div>
+            <div><label>Appointee (if Nominee Minor)</label><input type="text" name="appointee"></div>
         </div>
 
         <div class="section-title">III. Coverage Details (காப்பீடு விவரங்கள்)</div>
         <div class="grid">
             <div>
-                <label>Policy Type</label>
-                <select name="policy_type"><option>Individual Sum Insured Basis</option><option selected>Family Floater</option></select>
-            </div>
-            <div>
-                <label>Sum Insured Option </label>
+                <label>Sum Insured Options</label>
                 <select name="sum_insured">
-                    <option value="3 Lakhs">3 Lakhs</option><option value="4 Lakhs">4 Lakhs</option><option value="5 Lakhs" selected>5 Lakhs</option>
-                    <option value="6 Lakhs">6 Lakhs</option><option value="7 Lakhs">7 Lakhs</option><option value="8 Lakhs">8 Lakhs</option>
-                    <option value="10 Lakhs">10 Lakhs</option><option value="15 Lakhs">15 Lakhs</option><option value="25 Lakhs">25 Lakhs</option>
+                    <option value="300000">3 Lakhs</option><option value="400000">4 Lakhs</option><option value="500000" selected>5 Lakhs</option>
+                    <option value="600000">6 Lakhs</option><option value="700000">7 Lakhs</option><option value="800000">8 Lakhs</option>
+                    <option value="900000">9 Lakhs</option><option value="1000000">10 Lakhs</option><option value="1500000">15 Lakhs</option>
+                    <option value="2000000">20 Lakhs</option><option value="2500000">25 Lakhs</option>
                 </select>
             </div>
+            <div><label>Policy Type</label><select name="policy_type"><option>Individual</option><option selected>Family Floater</option></select></div>
         </div>
 
-        <div class="section-title">IV. Insured Person(s) Details (உறுப்பினர்கள் விவரம்)</div>
-        <div class="insured-box">
-            <b>Member 1 (Self)</b>
-            <div class="grid">
-                <input type="text" name="m1_name" placeholder="Name">
-                <input type="date" name="m1_dob">
-                <select name="m1_gender"><option>Male</option><option>Female</option></select>
-                <input type="text" name="m1_ht" placeholder="Height (cm)">
-                <input type="text" name="m1_wt" placeholder="Weight (kg)">
-                <input type="text" name="m1_bg" placeholder="Blood Group">
-            </div>
-        </div>
-        <p style="font-size: 11px; color: #666;">(குறிப்பு: அலுவலகப் பயன்பாட்டிற்கு 6 நபர்கள் வரை விவரங்கள் PDF-ல் சேர்க்கப்படும்)</p>
-
-        <div class="section-title">V. Existing Health Cover (முந்தைய காப்பீடு)</div>
-        <div class="grid">
-            <input type="text" name="prev_company" placeholder="Previous Company">
-            <input type="text" name="prev_policy_no" placeholder="Policy Number">
-            <input type="text" name="prev_sum" placeholder="Sum Insured">
-            <input type="date" name="prev_expiry" placeholder="Expiry Date">
-        </div>
-
-        <div class="section-title">VI. Medical Information (மருத்துவ விவரங்கள்)</div>
+        <div class="section-title">IV. Insured Person(s) Details (உறுப்பினர்கள்)</div>
+        <p class="note">6 நபர்கள் வரை விவரங்களை இங்கே வழங்கவும் (Fill for up to 6 members)</p>
+        
         <table class="medical-table">
-            <tr><td>1. Alcohol / Tobacco consumption? [cite: 124-138]</td><td><select name="med_lifestyle"><option value="N">No</option><option value="Y">Yes</option></select></td></tr>
-            <tr><td>2. Cardiovascular / Heart Diseases? [cite: 168]</td><td><select name="med_heart"><option value="N">No</option><option value="Y">Yes</option></select></td></tr>
-            <tr><td>3. Diabetes / Hypertension (BP)? [cite: 168]</td><td><select name="med_sugar"><option value="N">No</option><option value="Y">Yes</option></select></td></tr>
-            <tr><td>4. Cancer / Tumour / Oncology? [cite: 174]</td><td><select name="med_cancer"><option value="N">No</option><option value="Y">Yes</option></select></td></tr>
-            <tr><td>5. Kidney / Genitourinary disorders? [cite: 168]</td><td><select name="med_kidney"><option value="N">No</option><option value="Y">Yes</option></select></td></tr>
-            <tr><td>6. Any other chronic illness / surgeries?</td><td><select name="med_other"><option value="N">No</option><option value="Y">Yes</option></select></td></tr>
+            <thead>
+                <tr>
+                    <th>Member</th><th>Name</th><th>DOB</th><th>Gender</th><th>ABHA ID</th><th>Ht/Wt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1 (Self)</td><td><input type="text" name="m1_name" placeholder="Name"></td><td><input type="date" name="m1_dob"></td><td><select name="m1_gen"><option>M</option><option>F</option></select></td><td><input type="text" name="m1_abha"></td><td><input type="text" name="m1_hw" placeholder="170/70"></td></tr>
+                <tr><td>2</td><td><input type="text" name="m2_name"></td><td><input type="date" name="m2_dob"></td><td><select name="m2_gen"><option>M</option><option>F</option></select></td><td><input type="text" name="m2_abha"></td><td><input type="text" name="m2_hw"></td></tr>
+                <tr><td>3</td><td><input type="text" name="m3_name"></td><td><input type="date" name="m3_dob"></td><td><select name="m3_gen"><option>M</option><option>F</option></select></td><td><input type="text" name="m3_abha"></td><td><input type="text" name="m3_hw"></td></tr>
+                <tr><td>4</td><td><input type="text" name="m4_name"></td><td><input type="date" name="m4_dob"></td><td><select name="m4_gen"><option>M</option><option>F</option></select></td><td><input type="text" name="m4_abha"></td><td><input type="text" name="m4_hw"></td></tr>
+                <tr><td>5</td><td><input type="text" name="m5_name"></td><td><input type="date" name="m5_dob"></td><td><select name="m5_gen"><option>M</option><option>F</option></select></td><td><input type="text" name="m5_abha"></td><td><input type="text" name="m5_hw"></td></tr>
+                <tr><td>6</td><td><input type="text" name="m6_name"></td><td><input type="date" name="m6_dob"></td><td><select name="m6_gen"><option>M</option><option>F</option></select></td><td><input type="text" name="m6_abha"></td><td><input type="text" name="m6_hw"></td></tr>
+            </tbody>
         </table>
-        <label>Medical Details (ஆம் எனில் அதன் விவரம்)</label>
-        <textarea name="med_details" rows="2"></textarea>
 
-        <div class="section-title">VII. Bank Details (வங்கி விவரம்)</div>
+        <div class="section-title">VI. Medical History (மருத்துவ வரலாறு)</div>
+        <p class="note">Please do not leave the spaces blank. Select Yes/No for all.</p>
+        
+        <table class="medical-table">
+            <thead><tr><th>Condition</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th></tr></thead>
+            <tbody>
+                <tr><td align="left">Alcohol/Tobacco?</td><td><select name="m1_lic"><option>N</option><option>Y</option></select></td><td><select name="m2_lic"><option>N</option><option>Y</option></select></td><td><select name="m3_lic"><option>N</option><option>Y</option></select></td><td><select name="m4_lic"><option>N</option><option>Y</option></select></td><td><select name="m5_lic"><option>N</option><option>Y</option></select></td><td><select name="m6_lic"><option>N</option><option>Y</option></select></td></tr>
+                <tr><td align="left">Heart/BP/Cardio? [cite: 168]</td><td><select name="m1_hrt"><option>N</option><option>Y</option></select></td><td><select name="m2_hrt"><option>N</option><option>Y</option></select></td><td><select name="m3_hrt"><option>N</option><option>Y</option></select></td><td><select name="m4_hrt"><option>N</option><option>Y</option></select></td><td><select name="m5_hrt"><option>N</option><option>Y</option></select></td><td><select name="m6_hrt"><option>N</option><option>Y</option></select></td></tr>
+                <tr><td align="left">Diabetes/Thyroid? [cite: 168]</td><td><select name="m1_dia"><option>N</option><option>Y</option></select></td><td><select name="m2_dia"><option>N</option><option>Y</option></select></td><td><select name="m3_dia"><option>N</option><option>Y</option></select></td><td><select name="m4_dia"><option>N</option><option>Y</option></select></td><td><select name="m5_dia"><option>N</option><option>Y</option></select></td><td><select name="m6_dia"><option>N</option><option>Y</option></select></td></tr>
+                <tr><td align="left">Respiratory/Asthma?</td><td><select name="m1_res"><option>N</option><option>Y</option></select></td><td><select name="m2_res"><option>N</option><option>Y</option></select></td><td><select name="m3_res"><option>N</option><option>Y</option></select></td><td><select name="m4_res"><option>N</option><option>Y</option></select></td><td><select name="m5_res"><option>N</option><option>Y</option></select></td><td><select name="m6_res"><option>N</option><option>Y</option></select></td></tr>
+                <tr><td align="left">Digestive/Liver?</td><td><select name="m1_dig"><option>N</option><option>Y</option></select></td><td><select name="m2_dig"><option>N</option><option>Y</option></select></td><td><select name="m3_dig"><option>N</option><option>Y</option></select></td><td><select name="m4_dig"><option>N</option><option>Y</option></select></td><td><select name="m5_dig"><option>N</option><option>Y</option></select></td><td><select name="m6_dig"><option>N</option><option>Y</option></select></td></tr>
+            </tbody>
+        </table>
+        <label>If Yes to any, provide details (சிகிச்சை விவரம்)</label>
+        <textarea name="med_details" rows="3"></textarea>
+
+        <div class="section-title">VIII. Bank Details & Signature (வங்கி விவரம்)</div>
         <div class="grid">
             <input type="text" name="bank_name" placeholder="Bank Name">
             <input type="text" name="bank_acc" placeholder="Account Number">
             <input type="text" name="bank_ifsc" placeholder="IFSC Code">
         </div>
-
-        <div class="section-title">VIII. Documents Upload</div>
         <div class="grid">
-            <div><label>Customer Photo</label><input type="file" name="photo" accept="image/*"></div>
-            <div><label>Customer Signature</label><input type="file" name="sign" accept="image/*"></div>
+            <div><label>Upload Photo</label><input type="file" name="photo" accept="image/*"></div>
+            <div><label>Upload Signature</label><input type="file" name="sign" accept="image/*"></div>
         </div>
 
-        <button type="submit" class="btn-submit">SUBMIT & DOWNLOAD 6-PAGE PDF</button>
+        <button type="submit" class="btn-submit">SUBMIT & DOWNLOAD COMPLETED FORM</button>
     </form>
-    
-    <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #888;">
-        © 2026 Subramani Pandi | LIC & United India Professional Agent
-    </div>
 </div>
 
 </body>
