@@ -20,32 +20,40 @@ def process_pdf():
         if not os.path.exists(existing_pdf_path):
             return "பிழை: PDF கோப்பு சர்வரில் இல்லை!"
 
-        # 1. வாடிக்கையாளர் தகவல்களை ஒரு தற்காலிக PDF-ல் எழுதுகிறோம்
         packet = io.BytesIO()
         can = canvas.Canvas(packet, pagesize=letter)
-        
-        # பக்கம் 1-ல் தகவல்களை எழுதுதல் (Coordinates: X, Y)
         can.setFont("Helvetica", 10)
-        can.drawString(100, 645, data.get('name', ''))  # பெயர்
-        can.drawString(100, 625, data.get('dob', ''))   # பிறந்த தேதி
-        can.drawString(100, 580, data.get('address', '')) # முகவரி
-        can.drawString(450, 520, data.get('mobile', ''))  # மொபைல்
+
+        # --- துல்லியமான இடங்கள் (Corrected Coordinates) ---
         
-        # மருத்துவ விவரங்கள் (Medical Info Section VI) [cite: 120-194]
-        # உதாரணமாக P1-க்கான பதில்கள்
-        can.drawString(100, 400, f"Heart: {data.get('m1_hrt', 'N')}  Sugar: {data.get('m1_dia', 'N')}")
+        # 1. பெயர் (Name) - கோட்டின் மேல் சரியாக அமர
+        can.drawString(100, 683, data.get('name', '').upper())
+        
+        # 2. பிறந்த தேதி (DOB) 
+        can.drawString(100, 665, data.get('dob', ''))
+        
+        # 3. முகவரி (Address) - பல வரிகளாகப் பிரித்தல்
+        address = data.get('address', '')
+        can.drawString(120, 520, address[:40]) # முதல் வரி
+        if len(address) > 40:
+            can.drawString(120, 505, address[40:80]) # இரண்டாம் வரி
+
+        # 4. மொபைல் எண் (Mobile)
+        can.drawString(450, 440, data.get('mobile', ''))
+
+        # 5. மருத்துவ விவரங்கள் (Section VI - Page 2-ல் வரவேண்டியது)
+        # இப்போது முதல் பக்கத்தில் தெரியாமல் இருக்க இதைப் பக்கம் 2-க்கு மாற்ற வேண்டும்
         
         can.save()
         packet.seek(0)
         new_pdf = PdfReader(packet)
 
-        # 2. அசல் PDF-உடன் தகவல்களை இணைக்கிறோம்
         existing_pdf = PdfReader(open(existing_pdf_path, "rb"))
         output = PdfWriter()
 
         for i in range(len(existing_pdf.pages)):
             page = existing_pdf.pages[i]
-            if i == 0: # முதல் பக்கத்தில் மட்டும் தகவல்களை ஒட்டுகிறோம்
+            if i == 0: # முதல் பக்கம்
                 page.merge_page(new_pdf.pages[0])
             output.add_page(page)
 
@@ -56,7 +64,7 @@ def process_pdf():
         return send_file(
             output_stream,
             as_attachment=True,
-            download_name=f"Filled_Proposal_{data.get('name', 'Customer')}.pdf",
+            download_name=f"Fixed_Proposal_{data.get('name', 'Customer')}.pdf",
             mimetype='application/pdf'
         )
     except Exception as e:
